@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-app
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    volumes:
+      - .:/var/www
+      - /var/www/vendor
+      - /var/www/node_modules
+    depends_on:
+      - db
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=root
+      - VITE_APP_URL=http://localhost:8000
+    restart: unless-stopped
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        until nc -z db 5432; do
+          echo 'Waiting for PostgreSQL...'
+          sleep 2
+        done &&
+        echo 'Database should be ready!' &&
+        npm install &&
+        php artisan key:generate --no-interaction &&
+        php artisan migrate &&
+        npm run dev -- --host 0.0.0.0 &
+        php artisan serve --host=0.0.0.0 --port=8000
+      "
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
