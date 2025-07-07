@@ -3,12 +3,11 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use App\Mail\PatientRegistration;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\PatientRegistration;
-//use App\Models\Patient;
 
 class SendPatientRegistrationEmail implements ShouldQueue
 {

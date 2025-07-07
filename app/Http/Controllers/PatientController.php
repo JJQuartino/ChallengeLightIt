@@ -7,6 +7,7 @@ use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\SendPatientRegistrationEmail;
+use App\Jobs\SendPatientSMS;
 
 class PatientController extends Controller
 {
@@ -45,7 +46,9 @@ class PatientController extends Controller
             ]);
 
             SendPatientRegistrationEmail::dispatch($request->full_name, $request->email);
-
+            
+            //SendPatientSMS::dispatch($request->$request->country_code.$request->phone_number);
+            
             return response()->json([
                 'patient' => $patient
             ], 201);
