@@ -9,10 +9,7 @@ services:
     ports:
       - "8000:8000"
       - "5173:5173"
-    volumes:
-      - .:/var/www
-      - /var/www/vendor
-      - /var/www/node_modules
+    volumes: []  
     depends_on:
       - db
     environment:
@@ -23,7 +20,6 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=root
       - VITE_APP_URL=http://localhost:8000
-    restart: unless-stopped
     command: >
       sh -c "
         echo 'Waiting for database...' &&
@@ -31,8 +27,7 @@ services:
           echo 'Waiting for PostgreSQL...'
           sleep 2
         done &&
-        echo 'Database should be ready!' &&
-        npm install &&
+        echo 'Database ready!' &&
         php artisan key:generate --no-interaction &&
         php artisan migrate &&
         npm run dev -- --host 0.0.0.0 &

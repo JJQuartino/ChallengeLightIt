@@ -31,7 +31,7 @@ COPY package*.json ./
 RUN npm ci
 
 #Agregar dependencias de React
-RUN npm install react react-dom @vitejs/plugin-react
+#RUN npm install react react-dom @vitejs/plugin-react
 
 #Copiar el código del proyecto
 COPY . .
